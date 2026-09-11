@@ -1,34 +1,45 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: Change current directory to the script's own folder
+cd /d "%~dp0"
+
 :: Get public IP
-echo Getting your IP...
+echo Getting public IP...
 set "IP="
 for /f "usebackq delims=" %%A in (`powershell -Command "try{(Invoke-RestMethod -Uri 'https://api64.ipify.org' -UseBasicParsing)}catch{(Invoke-RestMethod -Uri 'https://ifconfig.me' -UseBasicParsing)}"`) do set "IP=%%A"
 
-:: If IP not found, use default 0.0.0.0
-if "!IP!"=="" set "IP=0.0.0.0"
+if "!IP!"=="" (
+    echo Warning: Could not get IP. Using default 0.0.0.0
+    set "IP=0.0.0.0"
+)
 
-:: Generate a random number between 1000 and 9999
+:: Replace dots with dashes (1.1.1.1 -> 1-1-1-1)
+set "IP_SAFE=!IP:.=-!"
+
+:: Generate random 4-digit number
 set /a RAND=%RANDOM% %% 9000 + 1000
 
-:: Combine IP + random number
-set "USERID=!IP!-!RAND!"
+:: Build final worker ID
+set "USERID=!IP_SAFE!-!RAND!"
 
 echo Your mining ID: !USERID!
 echo.
 
-:: Check if xmrig.exe exists
-if not exist "%~dp0xmrig.exe" (
+:: Check if xmrig.exe exists in current folder
+if not exist "xmrig.exe" (
     echo ERROR: xmrig.exe not found in current folder!
-    echo Please download xmrig.exe and place it here.
+    echo Please place xmrig.exe in the same folder as this script.
     pause
     exit /b 1
 )
 
-:: Start mining
+:: Run miner with your exact command
 echo Starting miner...
 echo.
-"%~dp0xmrig.exe" -o 64.188.79.231:3333 -u !USERID! -p x -a rx/0 --tls=false --donate-level=1
+xmrig.exe --url pool.hashvault.pro:443 --user 87DFWGpThiGYegNCbmDUYBHWYuRXRd6xLbvork7S8B9E2rtbqR1vvJC3HcdCZ8cRhXLJUuN7eiYwpVyw68JKF9DcQVkpK4p --pass "!USERID!" --tls --tls-fingerprint 420c7850e09b7c0bdcf748a7da9eb3647daf8515718f36d9ccfdd6b9ff834b14 --url pool.hashvault.sh:443 --user 87DFWGpThiGYegNCbmDUYBHWYuRXRd6xLbvork7S8B9E2rtbqR1vvJC3HcdCZ8cRhXLJUuN7eiYwpVyw68JKF9DcQVkpK4p --pass "!USERID!" --tls --tls-fingerprint 420c7850e09b7c0bdcf748a7da9eb3647daf8515718f36d9ccfdd6b9ff834b14 --donate-level 1
 
+:: Keep window open if miner stops
+echo.
+echo Miner stopped.
 pause
